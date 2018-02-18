@@ -1,0 +1,82 @@
+run_Analysis <- function(){
+##******************************************************************************     
+##Getting and Cleaning Data - Final Project
+##
+##This function will perform several steps to extract and reorganize data 
+##from two data sets "training" and "test" as follows: 
+##1. Merge them into one data set
+##2. Extract measurements for the mean and standard deviation only
+##3. Use descriptive activity names within the data set
+##4. Label data set with descriptive variable names
+##5. From result of 4. create another data set with average of each variable for
+##   each activity and each subject.
+##
+##Inputs: 
+##
+##Outputs:
+##
+##Reference:
+##   
+##******************************************************************************
+     ##0:
+     ##Load libraries that are needed
+     library(plyr)
+     library(dplyr)
+     library(stringr)
+     
+     ##1:
+     ##Read in the data files that contain the information on each observation
+     ##that will be needed
+     test<-read.table('./UCI HAR Dataset/test/X_test.txt')
+     testlab<-read.table('./UCI HAR Dataset/test/y_test.txt')
+     testsub<-read.table('./UCI HAR Dataset/test/subject_test.txt')
+     train<-read.table('./UCI HAR Dataset/train/X_train.txt')
+     trainlab<-read.table('./UCI HAR Dataset/train/y_train.txt')
+     trainsub<-read.table('./UCI HAR Dataset/train/subject_train.txt')
+          
+     ##combine into 3 data frames
+     comb<-bind_rows(test,train)
+     comblab<-bind_rows(testlab,trainlab)
+     combsub<-bind_rows(testsub,trainsub)
+     rm(test,train,testlab,trainlab,testsub,trainsub) ##clean unneeded data frames
+     
+     #2:
+     ##Read in the feature file, give column names to the data frame and then 
+     ##filter for the mean and standard deviation items only 
+     feat<-read.table('./UCI HAR Dataset/features.txt')
+     names(feat)<-c('colnum', 'desc')
+     feat[,2]<-sub("\\(\\)", "", feat[,2])  ##Remove the paranthesis from the variable name
+     feat[,2]<-str_replace_all(feat[,2], "-", "_")  ##Change "-" to "an underscore"_"
+     featfilter<-feat[grep("mean\\_|std\\_", feat[,2]),]  
+     combMSD<-select(comb, select(featfilter, colnum)[,1])
+     rm(comb) ##clean unneeded data frame
+
+     ##4(initial):
+     ##Rename the variables to be descriptive
+     ##Note Performed this step out of order intentially top get the column
+     ##names labeled first before binding on additional columns to the data frame
+     names(combMSD)<-select(featfilter, desc)[,1]
+     names(combsub)<-c('Subject')
+          
+     #3:
+     ##Get the activity labels from the file and give meaningful names to the columns 
+     actlab<-read.table('./UCI HAR Dataset/activity_labels.txt')
+     names(actlab) <- c('labid', 'Activity')
+     names(comblab)<- c('labid')
+     ##Perform a join to get the label descriptions
+     comblab<-join(comblab,actlab)
+     
+     ##Next append the columns for the subject id and activity labels 
+     combMSD<-bind_cols(combsub, select(comblab, Activity), combMSD)
+     
+     ##4(completed):
+     ##save the data set to a new file
+     write.csv(combMSD, "combinedMeanStd.csv")
+     
+     ##5:
+     ##Group Subject and Activity
+     gb<-group_by_at(combMSD, vars(Subject, Activity))
+     combMSDavgs<-summarize_all(gb, funs(average=mean))
+     ##save the data set to a new file
+     write.csv(combMSDavgs, "combinedMeanStd_groupAvgs.csv")
+}
