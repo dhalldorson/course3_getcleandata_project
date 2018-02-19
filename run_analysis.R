@@ -12,11 +12,15 @@ run_Analysis <- function(){
 ##   each activity and each subject.
 ##
 ##Inputs: 
-##
+##   {none}
 ##Outputs:
-##
-##Reference:
-##   
+##   Two files are created in the current working directory 
+##        "combinedMeanStd.csv" 
+##        "combinedMeanStd_groupAvgs.csv"
+##Dependencies:
+##   THe following libraries must be installed: plyr, dplyr, stringr
+##   The current working directory this is called from must contain an unzipped
+##   set of subfolders in the folder ".\UCI HAR Dataset" 
 ##******************************************************************************
      ##0:
      ##Load libraries that are needed
@@ -41,15 +45,17 @@ run_Analysis <- function(){
      rm(test,train,testlab,trainlab,testsub,trainsub) ##clean unneeded data frames
      
      #2:
-     ##Read in the feature file, give column names to the data frame and then 
-     ##filter for the mean and standard deviation items only 
+     ##Read in the feature file, give names to that data frame 
      feat<-read.table('./UCI HAR Dataset/features.txt')
      names(feat)<-c('colnum', 'desc')
-     feat[,2]<-sub("\\(\\)", "", feat[,2])  ##Remove the paranthesis from the variable name
+     ##Next two steps are to edit the names of the variables to make analysis easier later
+     feat[,2]<-sub("\\(\\)", "", feat[,2])  ##Remove the "paranthesis"()" from the variable name
      feat[,2]<-str_replace_all(feat[,2], "-", "_")  ##Change "-" to "an underscore"_"
+     
+     ##filter for the mean and standard deviation items only 
      featfilter<-feat[grep("mean\\_|std\\_", feat[,2]),]  
      combMSD<-select(comb, select(featfilter, colnum)[,1])
-     rm(comb) ##clean unneeded data frame
+     rm(comb) ##cleanup unneeded data frame
 
      ##4(initial):
      ##Rename the variables to be descriptive
