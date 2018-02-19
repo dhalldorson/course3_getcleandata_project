@@ -1,7 +1,7 @@
 ## README.MD
-###Data Science Course 3 - Getting and Cleaning Data - Project
-###Description of files included
- * CodeBook.md - COntains data dictionary of the files provided, summary of steps performed, and original source.  
+### Data Science Course 3 - Getting and Cleaning Data - Project  
+### Description of files included
+ * CodeBook.md - Contains data dictionary of the files provided, summary of steps performed, and original source.  
  * run_analysis.R - Script that performed the collection of data, cleanup, and generation of new data sets.  
  * combinedMeanStd.csv - This file contains values for the mean and standard deviation for the recorded observations
 of the subjects.  
