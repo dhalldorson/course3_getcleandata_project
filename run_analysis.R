@@ -11,14 +11,14 @@ run_Analysis <- function(){
 ##5. From result of 4. create another data set with average of each variable for
 ##   each activity and each subject.
 ##
-##Inputs: 
-##   {none}
+##Returned: 
+##    Result of the function will be the final tidy data set from step 5
 ##Outputs:
 ##   Two files are created in the current working directory 
-##        "combinedMeanStd.csv" 
-##        "combinedMeanStd_groupAvgs.csv"
+##        "combinedMeanStd.txt" 
+##        "combinedMeanStd_groupAvgs.txt"
 ##Dependencies:
-##   THe following libraries must be installed: plyr, dplyr, stringr
+##   The following libraries must be installed: plyr, dplyr, stringr
 ##   The current working directory this is called from must contain an unzipped
 ##   set of subfolders in the folder ".\UCI HAR Dataset" 
 ##******************************************************************************
@@ -77,12 +77,13 @@ run_Analysis <- function(){
      
      ##4(completed):
      ##save the data set to a new file
-     write.csv(combMSD, "combinedMeanStd.csv")
+     write.table(combMSD, "combinedMeanStd.txt", row.name=FALSE)
      
      ##5:
      ##Group Subject and Activity
      gb<-group_by_at(combMSD, vars(Subject, Activity))
      combMSDavgs<-summarize_all(gb, funs(average=mean))
      ##save the data set to a new file
-     write.csv(combMSDavgs, "combinedMeanStd_groupAvgs.csv")
+     write.table(combMSDavgs, "combinedMeanStd_groupAvgs.txt", row.name=FALSE)
+     combMSDavgs
 }
