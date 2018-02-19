@@ -1,6 +1,6 @@
 ---
 title: "CodeBook.md"
-author: "David Halldorson"
+author: "D. Halldorson"
 date: "February 18, 2018"
 output: html_document
 ---
@@ -13,7 +13,7 @@ an existing set of data and manipulate it into a new tidy set of data that can b
 for subsequent analysis.
 
 
-## Data set 1: combinedMeanStd.csv
+## Data set 1: combinedMeanStd.txt
 
 This file contains values for the mean and standard deviation for the recorded observations
 of the subjects. 
@@ -39,7 +39,7 @@ fBodyAccJerk_std_X, fBodyAccJerk_std_Y, fBodyAccJerk_std_Z,
 fBodyGyro_mean_X, fBodyGyro_mean_Y, fBodyGyro_mean_Z,  
 fBodyGyro_std_X, fBodyGyro_std_Y, fBodyGyro_std_Z  
 
-## Data set 2: combinedMeanStd_groupAvgs.csv
+## Data set 2: combinedMeanStd_groupAvgs.txt
 
 This file contains a summarization of the previous data set. For each Subject/Activity combination
 an average (mean) has been calculated for each variable.  
